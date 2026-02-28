@@ -285,11 +285,11 @@
         talents: [
           { id: 'p1', name: "Mimetismo Terra", icon: <Shield size={14}/>, levels: [
               { lv: 1, req: "Enterrado vivo", effect: "Ganha 5 PV temporários ao tocar o solo.", desc: "Pés firmes na terra." },
-              { lv: 2, req: "Terra I + 10 abates pedra", effect: "Não pode ser derrubado (prone).", desc: "Estabilidade de montanha." },
+              { lv: 2, req: "Terra I + 10 abates", effect: "Não pode ser derrubado (prone).", desc: "Estabilidade de montanha." },
               { lv: 3, req: "Terra II + Escavar túnel", effect: "Corpo de pedra: RD 5 contra físico.", desc: "Monólito vivo." }
           ]},
           { id: 'p2', name: "Sopro de Fogo", icon: <Flame size={14}/>, levels: [
-              { lv: 1, req: "Sobreviver fogo", effect: "Ataques causam +1 fogo.", desc: "Brasas nas veias." },
+              { lv: 1, req: "Sobreviver fogo", effect: "Ataques causam +1d4 fogo.", desc: "Brasas nas veias." },
               { lv: 2, req: "Fogo I + 50 dano chamas", effect: "Resistência a Fogo.", desc: "Pele de salamandra." },
               { lv: 3, req: "Fogo II + Queimar floresta", effect: "Pode lançar Mãos Flamejantes 3x/dia.", desc: "Dragão em forma humana." }
           ]},
@@ -343,7 +343,7 @@
       const [characterData, setCharacterData] = useState(null);
       const [allCharacters, setAllCharacters] = useState([]);
       const [loading, setLoading] = useState(true);
-      const [tooltip, setTooltip] = useState({ show: false, content: null, x: 0, y: 0 });
+      const [tooltip, setTooltip] = useState({ show: false, content: null, x: 0, y: 0, above: false });
 
       useEffect(() => {
         const initAuth = async () => {
@@ -407,7 +407,10 @@
       };
 
       const showTooltip = (e, talentName, levelData) => {
-        setTooltip({ show: true, content: { ...levelData, talentName }, x: e.clientX, y: e.clientY });
+        const tooltipHeight = 210; // approximate height of tooltip
+        const spaceBelow = window.innerHeight - e.clientY;
+        const shouldRenderAbove = spaceBelow < tooltipHeight;
+        setTooltip({ show: true, content: { ...levelData, talentName }, x: e.clientX, y: e.clientY, above: shouldRenderAbove });
       };
 
       if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-amber-500 font-black italic animate-pulse tracking-widest">INVOCANDO GRIMÓRIO...</div>;
@@ -488,7 +491,10 @@
           {tooltip.show && (
             <div 
               className="fixed z-[100] pointer-events-none bg-slate-900 border border-slate-700 p-5 rounded-3xl shadow-[0_0_50px_rgba(0,0,0,0.8)] w-72 animate-in fade-in zoom-in-95"
-              style={{ left: tooltip.x + 20, top: tooltip.y + 20 }}
+              style={{
+                left: tooltip.x + 20,
+                top: tooltip.above ? tooltip.y - 210 : tooltip.y + 20,
+              }}
             >
               <div className="flex items-center gap-2 mb-2">
                  <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
