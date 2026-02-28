@@ -22,15 +22,15 @@ import {
 } from 'lucide-react';
 
 // --- CONFIGURAÇÃO FIREBASE ---
-const firebaseConfig = {
-  apiKey: "AIzaSyCzR5bU-ou_Cz_yxugkA2eXd_3zf86ojgw",
+const firebaseConfig = typeof __firebase_config !== 'undefined' 
+  ? JSON.parse(__firebase_config) 
+  : { apiKey: "AIzaSyCzR5bU-ou_Cz_yxugkA2eXd_3zf86ojgw",
   authDomain: "rpg-talenttree.firebaseapp.com",
   projectId: "rpg-talenttree",
   storageBucket: "rpg-talenttree.firebasestorage.app",
   messagingSenderId: "981095423243",
   appId: "1:981095423243:web:77d651b1715e08b3d4960e",
-  measurementId: "G-EEE5ZB2K8Q"
-};
+  measurementId: "G-EEE5ZB2K8Q" };
 
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'rpg-mega-trees-v7';
 const app = initializeApp(firebaseConfig);
